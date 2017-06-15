@@ -1,0 +1,34 @@
+.formdiv{
+  padding-top: 30px;
+}
+form label{
+  display: block;
+  width: 20%;
+  float: left;
+  text-align: right;
+  line-height: 30px;
+  font-size: 16px;
+  padding-right: 5px;
+}
+form input {
+  width: 60%;
+  line-height: 30px;
+  text-indent: 10px;
+}
+.btns {
+  margin-top: 50px;
+  padding: 0 30%;
+}
+.btns button {
+  display: block;
+  float: left;
+  width: 40%;
+  line-height: 30px;
+  border-radius: 10px;
+  outline: 0;
+  border: 0;
+  background: #68cebe;
+}
+.btns button:last-child{
+  float: right;
+}
