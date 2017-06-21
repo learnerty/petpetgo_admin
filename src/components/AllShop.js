@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 class AllShop extends React.Component{
   constructor(){
     super()
@@ -9,6 +10,8 @@ class AllShop extends React.Component{
   componentWillMount(){
     axios.get('http://petapi.haoduoshipin.com/shops')
       .then(res => this.props.dispatch({type:'ALLSHOP',allshop:res.data.shops}))
+    sessionStorage.petadnav = JSON.stringify([{title:'店铺列表',path:this.props.location.pathname}])
+    this.props.dispatch({type:'NAVLIST',navlist:JSON.parse(sessionStorage.petadnav)})
   }
   search(){
     let val = {key:this.input.value}
@@ -16,7 +19,6 @@ class AllShop extends React.Component{
       .then(res => this.props.dispatch({type:'ALLSHOP',allshop:res.data.shops}))
   }
   render(){
-    console.log(this.props.allshop);
     let divSty = {
       width:'200px',
       height:'200px',
@@ -28,7 +30,7 @@ class AllShop extends React.Component{
     return (
       <div>
         <div className="clearfix">
-          <h1 style={{float:'left'}}>所有店铺</h1>
+          <h1 style={{float:'left'}}>店铺列表</h1>
           <div style={{float:'right'}}><input ref={input => this.input=input} onChange={this.search}/><button onClick={this.search}>搜索</button></div>
         </div>
         {
@@ -37,9 +39,12 @@ class AllShop extends React.Component{
             {
               this.props.allshop.map(item => {
                 return (
-                  <div key={item._id} style={divSty}>
-                    <h3 style={{margin:'10px 0'}}>{item.name}</h3>
-                  </div>
+                  <Link to={{pathname:`/addCats/${item._id}`,title:item.name}} key={item._id} style={{color:'#777'}}>
+                    <div style={divSty}>
+                      <h3 style={{margin:'10px 0'}}>{item.name}</h3>
+                      <img src={item.poster} alt='img'/>
+                    </div>
+                  </Link>
                 )
               })
             }

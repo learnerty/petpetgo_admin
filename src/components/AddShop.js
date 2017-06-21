@@ -1,17 +1,22 @@
 import React from 'react';
 import '../css/addshop.css'
 import axios from 'axios'
+import { connect } from 'react-redux'
 class AddShop extends React.Component{
+  componentWillMount(){
+    sessionStorage.petadnav = JSON.stringify([{title:'添加店铺',path:this.props.location.pathname}])
+    this.props.dispatch({type:'NAVLIST',navlist:JSON.parse(sessionStorage.petadnav)})
+  }
   handleSubmit(e){
     e.preventDefault()
-    let newShop = {name:this.addshopname.value}
-    if(newShop.name){
-      axios.post('http://petapi.haoduoshipin.com/shop/new',newShop)
+    let newShop = {name:this.addshopname.value,poster:this.addshopimg.value,desc:'desc the shop'}
+    if(newShop.name&&newShop.poster){
+      axios.post('http://petapi.haoduoshipin.com/shop',newShop)
         .then(res => this.form.reset())
+        .catch(err => console.log(err))
     }else{
-      alert('店铺名不能为空')
+      alert('店铺名或图片不能为空')
     }
-
   }
   render(){
     return (
@@ -21,6 +26,7 @@ class AddShop extends React.Component{
           <form onSubmit={this.handleSubmit.bind(this)} ref={form => this.form=form}>
             <div>
               <label>店铺名:</label><input placeholder="请输入店铺名称" ref={input => this.addshopname = input}/>
+              <label>店铺图片:</label><input placeholder="请输入图片网址" ref={input => this.addshopimg = input}/>
             </div>
             <div className="btns clearfix">
               <button type="submit">添加</button>
@@ -28,9 +34,8 @@ class AddShop extends React.Component{
             </div>
           </form>
         </div>
-
       </div>
     )
   }
 }
-export default AddShop
+export default connect(null)(AddShop)
